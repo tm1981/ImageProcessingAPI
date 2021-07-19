@@ -1,6 +1,4 @@
-# Project Title
-
-Image Processing API
+# Image Processing API
 
 ## Description
 
@@ -8,9 +6,9 @@ Image Processing API is the first project in Udacity FullStack JavaScript Develo
 
 ## Getting Started
 
-    clone this repo and run "npm install" to install all necessary npm packages
+clone this repo and run "npm install" to install all necessary npm packages
     
-### Scripts Avalibe
+### Scripts Available
 
 ```
 npm run build //build the project
