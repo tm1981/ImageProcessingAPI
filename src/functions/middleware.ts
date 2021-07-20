@@ -16,7 +16,7 @@ const validateQuery = async (
     query.width === undefined ||
     query.height === undefined
   ) {
-    errors.jsonErrorMsg('query parameter are missing', res)
+    errors.jsonErrorMsg('query parameters are missing', res)
     return
   }
 
@@ -27,7 +27,8 @@ const validateQuery = async (
   )
   let resizedFileName: string
   if (imageSize) {
-    resizedFileName = `${imageFile}-${imageSize[0]}-${imageSize[1]}`
+    const size = imageSize as number[]
+    resizedFileName = `${imageFile}-${size[0]}-${size[1]}`
     // check of orginal image found
     if (await files.ifImageExists(imageFile as string, 'full')) {
       // check if resized image found
@@ -40,8 +41,8 @@ const validateQuery = async (
         req.query.resize = 'true'
         req.query.file = imageFile
         // sending back image width and height to be used for resizing
-        req.query.imgSizeW = String(imageSize[0])
-        req.query.imgSizeH = String(imageSize[1])
+        req.query.imgSizeW = String(size[0])
+        req.query.imgSizeH = String(size[1])
         next()
       }
     } else {

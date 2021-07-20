@@ -1,10 +1,10 @@
 import { promises as fsPromises } from 'fs'
-import sharp from 'sharp'
+import sharp, { OutputInfo } from 'sharp'
 import express from 'express'
 import errors from './errors'
 
 // display image from disk as api response
-const displayImage = (fileName: string, res: express.Response) => {
+const displayImage = (fileName: string, res: express.Response) :void => {
   fsPromises
     .readFile(`./src/images/thumb/${fileName}.jpg`)
     .then((image) => {
@@ -16,7 +16,7 @@ const displayImage = (fileName: string, res: express.Response) => {
     })
 }
 // resize image with sharp
-const resizeImage = (filename: string, width: string, height: string) => {
+const resizeImage = (filename: string, width: string, height: string) :Promise<OutputInfo> => {
   return fsPromises
     .readFile(`./src/images/full/${filename}.jpg`)
     .then((img) => {
@@ -26,7 +26,7 @@ const resizeImage = (filename: string, width: string, height: string) => {
     })
 }
 // check if file exists
-const ifImageExists = async (imageName: string, folder: string) => {
+const ifImageExists = async (imageName: string, folder: string): Promise<boolean> => {
   const path = `./src/images/${folder}/${imageName}.jpg`
   try {
     await fsPromises.access(path)
@@ -36,24 +36,21 @@ const ifImageExists = async (imageName: string, folder: string) => {
   }
 }
 // check width and height values
-const checkWidthHeight = (width: string, height: string) => {
+const checkWidthHeight = (width: string, height: string) : boolean | Array<number> => {
   const w = parseInt(width)
   const h = parseInt(height)
   if (isNaN(w) || isNaN(h)) {
     return false
   } else if (w > 9 && h > 9 && w <= 4000 && h <= 4000) {
     return [w, h]
+  } else {
+    return false
   }
-}
-
-const myFunc = (num: number): number => {
-  return num * num
 }
 
 export default {
   ifImageExists,
   checkWidthHeight,
   displayImage,
-  resizeImage,
-  myFunc,
+  resizeImage
 }

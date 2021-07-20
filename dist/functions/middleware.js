@@ -43,20 +43,23 @@ var errors_1 = __importDefault(require("./errors"));
 var files_1 = __importDefault(require("./files"));
 // middleware that check if query parameters are correct and if resized image exists
 var validateQuery = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, imageFile, imageSize, resizedFileName;
+    var query, imageFile, imageSize, resizedFileName, size;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 query = req.query;
                 imageFile = req.query.filename;
                 // check if query are valid
-                if (imageFile === undefined || query.width === undefined || query.height === undefined) {
-                    errors_1.default.jsonErrorMsg('query parameter are missing', res);
+                if (imageFile === undefined ||
+                    query.width === undefined ||
+                    query.height === undefined) {
+                    errors_1.default.jsonErrorMsg('query parameters are missing', res);
                     return [2 /*return*/];
                 }
                 imageSize = files_1.default.checkWidthHeight(query.width, query.height);
                 if (!imageSize) return [3 /*break*/, 5];
-                resizedFileName = imageFile + "-" + imageSize[0] + "-" + imageSize[1];
+                size = imageSize;
+                resizedFileName = imageFile + "-" + size[0] + "-" + size[1];
                 return [4 /*yield*/, files_1.default.ifImageExists(imageFile, 'full')];
             case 1:
                 if (!_a.sent()) return [3 /*break*/, 3];
@@ -73,8 +76,8 @@ var validateQuery = function (req, res, next) { return __awaiter(void 0, void 0,
                     req.query.resize = 'true';
                     req.query.file = imageFile;
                     // sending back image width and height to be used for resizing
-                    req.query.imgSizeW = String(imageSize[0]);
-                    req.query.imgSizeH = String(imageSize[1]);
+                    req.query.imgSizeW = String(size[0]);
+                    req.query.imgSizeH = String(size[1]);
                     next();
                 }
                 return [3 /*break*/, 4];

@@ -9,7 +9,9 @@ var middleware_1 = __importDefault(require("../../functions/middleware"));
 var images = express_1.default.Router();
 images.get('/', middleware_1.default, function (req, res) {
     if (req.query.resize === 'true') {
-        files_1.default.resizeImage(req.query.filename, req.query.imgSizeW, req.query.imgSizeH).then(function () {
+        files_1.default
+            .resizeImage(req.query.filename, req.query.imgSizeW, req.query.imgSizeH)
+            .then(function () {
             var resizedImg = req.query.filename + "-" + req.query.imgSizeW + "-" + req.query.imgSizeH;
             files_1.default.displayImage(resizedImg, res);
             console.log('resizing and displaying new image');

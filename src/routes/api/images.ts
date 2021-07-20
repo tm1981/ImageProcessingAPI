@@ -3,7 +3,7 @@ import files from '../../functions/files'
 import validateQuery from '../../functions/middleware'
 const images = express.Router()
 
-images.get('/', validateQuery, (req, res) => {
+images.get('/', validateQuery, (req, res): void => {
   if (req.query.resize === 'true') {
     files
       .resizeImage(

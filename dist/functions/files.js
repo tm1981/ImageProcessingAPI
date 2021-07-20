@@ -44,16 +44,21 @@ var sharp_1 = __importDefault(require("sharp"));
 var errors_1 = __importDefault(require("./errors"));
 // display image from disk as api response
 var displayImage = function (fileName, res) {
-    fs_1.promises.readFile("./src/images/thumb/" + fileName + ".jpg").then(function (image) {
+    fs_1.promises
+        .readFile("./src/images/thumb/" + fileName + ".jpg")
+        .then(function (image) {
         res.writeHead(200, { 'Content-Type': 'image/gif' });
         res.end(image, 'binary');
-    }).catch(function (e) {
+    })
+        .catch(function (e) {
         errors_1.default.jsonErrorMsg('image was not found on the server', res);
     });
 };
 // resize image with sharp
 var resizeImage = function (filename, width, height) {
-    return fs_1.promises.readFile("./src/images/full/" + filename + ".jpg").then(function (img) {
+    return fs_1.promises
+        .readFile("./src/images/full/" + filename + ".jpg")
+        .then(function (img) {
         return sharp_1.default(img)
             .resize(parseInt(width), parseInt(height))
             .toFile("./src/images/thumb/" + filename + "-" + width + "-" + height + ".jpg");
@@ -90,8 +95,13 @@ var checkWidthHeight = function (width, height) {
     else if (w > 9 && h > 9 && w <= 4000 && h <= 4000) {
         return [w, h];
     }
+    else {
+        return false;
+    }
 };
-var myFunc = function (num) {
-    return num * num;
+exports.default = {
+    ifImageExists: ifImageExists,
+    checkWidthHeight: checkWidthHeight,
+    displayImage: displayImage,
+    resizeImage: resizeImage
 };
-exports.default = { ifImageExists: ifImageExists, checkWidthHeight: checkWidthHeight, displayImage: displayImage, resizeImage: resizeImage, myFunc: myFunc };
